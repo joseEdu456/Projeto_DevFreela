@@ -23,3 +23,5 @@ Este projeto foi desenvolvido com o objetivo de praticar e aplicar conceitos ess
 Sou estudante do **7º período de Ciência da Computação**, apaixonado por tecnologia, desenvolvimento de software e boas práticas de programação. Este projeto faz parte da minha jornada de aprendizado, com foco especial em APIs, arquitetura de sistemas e desenvolvimento backend com C# e .NET.
 
 Sempre buscando evoluir, gosto de transformar teoria em prática através de projetos que reforcem conceitos fundamentais e preparem para desafios do mundo real.
+
+🔗 [Acesse meu LinkedIn](https://www.linkedin.com/in/josé-eduardo-rubio-da-silva-brianez-39746b246/)
