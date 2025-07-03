@@ -63,6 +63,11 @@ namespace DevFreela.Application.Services
                 .Take(tamanho)
                 .ToList();
 
+            if (!projetos.Any())
+            {
+                return ResultViewModel<List<ProjectItemViewModel>>.Error("Nenhum projeto encontrado");
+            }
+
             var model = projetos.Select(ProjectItemViewModel.ToEntity).ToList();
 
             return ResultViewModel<List<ProjectItemViewModel>>.Sucess(model);
@@ -83,7 +88,7 @@ namespace DevFreela.Application.Services
 
             return ResultViewModel<ProjectViewModel>.Sucess(model);
         }
-
+        
         public ResultViewModel<int> Insert(CreateProjectInputModel model)
         {
             var projeto = model.ToEntity();
