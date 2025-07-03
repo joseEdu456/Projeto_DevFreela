@@ -26,7 +26,7 @@ namespace DevFreela.Application.Services
                 .ThenInclude(u => u.Habilidade)
                 .SingleOrDefault(u => u.Id == id);
 
-            if (user.IsDeleted || user is null)
+            if (user is null || user.IsDeleted) 
             {
                 return ResultViewModel<UserViewModel>.Error("Usuário não encontrado");
             }
@@ -46,14 +46,14 @@ namespace DevFreela.Application.Services
             return ResultViewModel.Sucess();
         }
 
-        public ResultViewModel InserirUser(CreatedUserInputModel model)
+        public ResultViewModel<int> InserirUser(CreatedUserInputModel model)
         {
             var user = new User(model.Nome, model.Email, model.DtNascimento);
 
             _db.Users.Add(user);
             _db.SaveChanges();
 
-            return ResultViewModel.Sucess();
+            return ResultViewModel<int>.Sucess(user.Id);
         }
     }
 }

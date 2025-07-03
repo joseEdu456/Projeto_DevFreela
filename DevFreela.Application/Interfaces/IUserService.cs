@@ -10,7 +10,7 @@ namespace DevFreela.Application.Interfaces
     public interface IUserService
     {
         public ResultViewModel<UserViewModel> GetById(int id);
-        public ResultViewModel InserirUser(CreatedUserInputModel model);
+        public ResultViewModel<int> InserirUser(CreatedUserInputModel model);
         public ResultViewModel InserirSkillUser(int idUser, UserSkillsInputModel model);
     }
 }
