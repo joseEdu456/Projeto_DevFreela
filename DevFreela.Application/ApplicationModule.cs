@@ -1,4 +1,5 @@
-﻿using DevFreela.Application.Interfaces;
+﻿using DevFreela.Application.Commands.CompleteProject;
+using DevFreela.Application.Interfaces;
 using DevFreela.Application.Services;
 using DevFreela.Core.Interfaces;
 using DevFreela.Infrastructure.Persistence;
@@ -20,7 +21,8 @@ namespace DevFreela.Application
         {
             services
                 .AddDbContext(configuration)
-                .AddServices();
+                .AddServices()
+                .AddHandler();
 
             return services;
         }
@@ -40,6 +42,13 @@ namespace DevFreela.Application
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISkillService, SkillService>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddHandler(this IServiceCollection services)
+        {
+            services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CompleteProjectCommand>());
 
             return services;
         }
