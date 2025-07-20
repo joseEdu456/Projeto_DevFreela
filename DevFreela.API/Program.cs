@@ -1,6 +1,7 @@
 using DevFreela.API.ExceptionHandler;
 using DevFreela.Application;
 using DevFreela.Application.Models;
+using DevFreela.Infrastructure;
 using DevFreela.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
-builder.Services.AddApplication(builder.Configuration);
+builder.Services
+    .AddApplication(builder.Configuration)
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddProblemDetails();
 

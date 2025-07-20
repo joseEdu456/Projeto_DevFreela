@@ -20,19 +20,8 @@ namespace DevFreela.Application
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddDbContext(configuration)
                 .AddServices()
                 .AddHandler();
-
-            return services;
-        }
-
-        private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
-        {
-            services
-                .AddDbContext<DevFreelaDbContext>(o => 
-                    o.UseSqlServer(configuration.GetConnectionString("ProjectConnectionString"))
-                );
 
             return services;
         }

@@ -1,4 +1,5 @@
 ﻿using DevFreela.Application.Models;
+using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using System;
@@ -11,18 +12,18 @@ namespace DevFreela.Application.Commands.InsertProject
 {
     public class InsertProjectHandler : IRequestHandler<InsertProjectCommand, ResultViewModel<int>>
     {
-        private readonly DevFreelaDbContext _db;
-        public InsertProjectHandler(DevFreelaDbContext db)
+        private readonly IProjectRepository _repository;
+
+        public InsertProjectHandler(IProjectRepository repository)
         {
-            _db = db;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel<int>> Handle(InsertProjectCommand request, CancellationToken cancellationToken)
         {
             var projeto = request.ToEntity();
 
-            await _db.Projects.AddAsync(projeto);
-            await _db.SaveChangesAsync();
+            await _repository.AddProject(projeto);
 
             return ResultViewModel<int>.Sucess(projeto.Id);
         }
