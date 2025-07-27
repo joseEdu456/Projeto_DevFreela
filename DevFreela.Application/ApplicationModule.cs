@@ -1,8 +1,11 @@
 ﻿using DevFreela.Application.Commands.CompleteProject;
 using DevFreela.Application.Interfaces;
+using DevFreela.Application.Models;
 using DevFreela.Application.Services;
 using DevFreela.Core.Interfaces;
 using DevFreela.Infrastructure.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +24,8 @@ namespace DevFreela.Application
         {
             services
                 .AddServices()
-                .AddHandler();
+                .AddHandler()
+                .AddValidation();
 
             return services;
         }
@@ -38,6 +42,15 @@ namespace DevFreela.Application
         private static IServiceCollection AddHandler(this IServiceCollection services)
         {
             services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CompleteProjectCommand>());
+
+            return services;
+        }
+
+        private static IServiceCollection AddValidation(this IServiceCollection services)
+        {
+            services
+                .AddFluentValidationAutoValidation()
+                .AddValidatorsFromAssemblyContaining<CreatedUserInputModel>();
 
             return services;
         }
