@@ -5,6 +5,7 @@ namespace DevFreela.Core.Entities
 {
     public class Project : BaseEntity
     {
+        public const string INVALID_OPERATION_MESSAGE = "Projeto não está mais no status de Criado";
         public string Title { get; private set; }
         public string Description { get; private set; }
         public int IdCliente { get; private set; }
@@ -41,11 +42,13 @@ namespace DevFreela.Core.Entities
 
         public void Iniciar()
         {
-            if (Status == EnumProjectStatus.Criado )
+            if (Status != EnumProjectStatus.Criado )
             {
-                Status = EnumProjectStatus.EmProgresso;
-                DataInicioProjeto = DateTime.Now;
+                throw new InvalidOperationException(INVALID_OPERATION_MESSAGE);
             }
+
+            Status = EnumProjectStatus.EmProgresso;
+            DataInicioProjeto = DateTime.Now;
         }
         public void Finalizar()
         {
