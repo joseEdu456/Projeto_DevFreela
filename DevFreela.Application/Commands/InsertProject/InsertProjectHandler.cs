@@ -23,9 +23,9 @@ namespace DevFreela.Application.Commands.InsertProject
         {
             var projeto = request.ToEntity();
 
-            await _repository.AddProject(projeto);
+            var id = await _repository.AddProject(projeto);
 
-            return ResultViewModel<int>.Sucess(projeto.Id);
+            return ResultViewModel<int>.Sucess(id);
         }
     }
 }
