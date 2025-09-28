@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Enums;
+using FluentAssertions;
 
 namespace DevFreela.UnitTests.Core
 {
@@ -22,6 +23,10 @@ namespace DevFreela.UnitTests.Core
             //Assert
             Assert.Equal(EnumProjectStatus.EmProgresso, project.Status);
             Assert.NotNull(project.DataInicioProjeto);
+
+            //Usando o fluent assertion para melhor legibilidade
+            project.Status.Should().Be(EnumProjectStatus.EmProgresso);
+            project.DataInicioProjeto.Should().NotBeNull();
 
             Assert.True(project.Status == EnumProjectStatus.EmProgresso);
             Assert.False(project.DataInicioProjeto is null);
@@ -42,6 +47,10 @@ namespace DevFreela.UnitTests.Core
 
             //Verifica se a mensagem da exceção é a esperada com a que foi gerada
             Assert.Equal(Project.INVALID_OPERATION_MESSAGE, execption.Message);
+
+            start.Should()
+                .Throw<InvalidOperationException>()
+                .WithMessage(Project.INVALID_OPERATION_MESSAGE);
         }
     }
 }

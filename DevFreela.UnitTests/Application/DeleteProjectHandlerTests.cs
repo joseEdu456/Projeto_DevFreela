@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using DevFreela.Application.Commands.DeleteProject;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
+using DevFreela.UnitTests.Faker;
 using Microsoft.Identity.Client;
+using Moq;
 using NSubstitute;
 
 namespace DevFreela.UnitTests.Application
@@ -40,6 +42,35 @@ namespace DevFreela.UnitTests.Application
         }
 
         [Fact]
+        public async Task ProjectExists_Delete_Sucess_Moq()
+        {
+            // Arrange
+
+            //Configurando projeto exemplo
+            //var project = new Project("Project Teste", "Teste do project", 1, 2, 1000);
+
+            //Usando Bogus pra gerar dados fakes
+            var project = FakeDataHelper.CreateFakeProject();
+
+            // O que pode se notar é que o moq possui a sintaxe bem mais simples
+            var repository = Mock.Of<IProjectRepository>(p =>
+                    p.GetById(It.IsAny<int>()) == Task.FromResult(project) &&
+                    p.Delete(It.IsAny<Project>()) == Task.CompletedTask
+                );
+
+            var handler = new DeleteProjectHandler(repository);
+
+            var command = new DeleteProjectCommand(1);
+            // Act
+            var result = await handler.Handle(command, new CancellationToken());
+
+            // Assert
+            Assert.True(result.IsSucess); // Verificando se o resultado deu sucesso
+            Mock.Get(repository).Verify(r => r.GetById(1), Times.Once);
+            Mock.Get(repository).Verify(r => r.Delete(It.IsAny<Project>()), Times.Once);
+        }
+
+        [Fact]
         public async Task ProjectDoesNotExists_Delete_Error_NSubstitute()
         {
             const string messageError = "Projeto não encontrado"; // Mensagem de erro esperada
@@ -59,6 +90,31 @@ namespace DevFreela.UnitTests.Application
             Assert.Equal(messageError, result.Message); // Verificando se a mensagem de erro é a esperada
             await repository.Received(1).GetById(Arg.Any<int>()); // Verificando se o método GetById foi chamado uma vez com qualquer valor
             await repository.DidNotReceive().Delete(Arg.Any<Project>()); // Verificando se o método Delete não foi chamado, pois o projeto não existe
+        }
+
+        [Fact]
+        public async Task ProjectDoesNotExists_Delete_Error_Moq()
+        {
+            const string messageError = "Projeto não encontrado"; // Mensagem de erro esperada
+
+            // Arrange
+            //Chamada do GetById deve retornar um objeto project nulo
+            var repository = Mock.Of<IProjectRepository>(p =>
+                    p.GetById(It.IsAny<int>()) == Task.FromResult((Project?)null)
+                );
+
+            var handler = new DeleteProjectHandler(repository);
+
+            var command = new DeleteProjectCommand(1);
+            // Act
+            var result = await handler.Handle(command, new CancellationToken());
+
+            // Assert
+            Assert.False(result.IsSucess); // Verificando se o resultado não deu sucesso
+            Assert.Equal(messageError, result.Message); // Verificando se a mensagem de erro é a esperada
+
+            Mock.Get(repository).Verify(r => r.GetById(1), Times.Once);
+            Mock.Get(repository).Verify(r => r.Delete(It.IsAny<Project>()), Times.Never);
         }
     }
 }
