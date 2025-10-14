@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,19 @@ namespace DevFreela.Infrastructure.Auth
 
         public string ComputeHash(string password)
         {
-            throw new NotImplementedException();
+            using (var hash = SHA256.Create())
+            {
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var hashBytes = hash.ComputeHash(passwordBytes);
+                var builder = new StringBuilder();
+
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    builder.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
         }
 
         public string GenerateToken(string email, string role)

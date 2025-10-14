@@ -11,6 +11,7 @@ using DevFreela.Core.Entities;
 using DevFreela.Core.Interfaces;
 using DevFreela.Infrastructure.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace DevFreela.API.Controllers
 
         // GET api/projects?search=crm
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get(string search = "", int page = 0)
         {
             int tamanho = 3;

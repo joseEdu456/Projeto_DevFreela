@@ -48,7 +48,7 @@ namespace DevFreela.Application.Services
 
         public ResultViewModel<int> InserirUser(CreatedUserInputModel model)
         {
-            var user = new User(model.Nome, model.Email, model.DtNascimento);
+            var user = new User(model.Nome, model.Email, model.DtNascimento, model.Senha, model.Role);
 
             _db.Users.Add(user);
             _db.SaveChanges();
